@@ -17,7 +17,19 @@ export default class TokenDao {
     })
   }
 
-  clear(){
+  get() {
+    return new Promise((resolve, reject) => {
+      AsyncStorage.getItem(ACCESS_TOKEN)
+        .then(token => {
+          resolve(token);
+        })
+        .catch(error => {
+          reject(error);
+        })
+    })
+  }
+
+  clear() {
     return new Promise((resolve, reject) => {
       AsyncStorage.removeItem(ACCESS_TOKEN)
         .then(() => {

@@ -2,26 +2,38 @@
  * Created by looper on 2017/8/28.
  */
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addNavigationHelpers, StackNavigator } from 'react-navigation';
+import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-navigation';
 
 import Login from './containers/Login';
-import Main from './containers/Main';
+import AppDrawer  from './AppDrawer';
+import TokenDao from './dao/TokenDao'
 
 export const AppNavigator = StackNavigator({
+  AppDrawer: { screen: AppDrawer },
   Login: { screen: Login },
-  Main: { screen: Main },
 });
 
-const AppWithNavigationState = ({ dispatch, nav }) => (
-  <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })}/>
-);
+class AppWithNavigationState extends React.Component {
 
-AppWithNavigationState.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  nav: PropTypes.object.isRequired,
-};
+  componentDidMount() {
+    const dao = new TokenDao();
+    dao.get().then(token => {
+      if (!token) {
+        this.props.dispatch(NavigationActions.navigate({ routeName: 'Login' }));
+      }
+    }).catch(error => {
+      this.props.dispatch(NavigationActions.navigate({ routeName: 'Login' }));
+    })
+  }
+
+  render() {
+    const { dispatch, nav } = this.props;
+    return (
+      <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })}/>
+    )
+  }
+}
 
 const mapStateToProps = state => ({
   nav: state.nav,

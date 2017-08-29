@@ -4,9 +4,9 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Provider} from 'react-redux';
-import {store} from './app/store/index';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import { store } from './app/store/index';
 import {
   AppRegistry,
 } from 'react-native';
