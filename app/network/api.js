@@ -34,12 +34,12 @@ export class ApplicationError {
   }
 }
 
-export const fetchApi = (path, params = {}, options = {}) => {
+export const fetchApi = (path, params = {}, isPost = false) => {
   const APP_BACKEND = 'https://api.weibo.com'
   const query = Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&')
   const url = APP_BACKEND + path + '?' + query
   const fetchOptions = {
-    ...options,
+    method: isPost ? 'POST' : 'GET',
   }
 
   incrementActivityCount()
@@ -77,6 +77,9 @@ export const fetchApi = (path, params = {}, options = {}) => {
 }
 
 export const getAccessToken = (params) => {
-  return fetchApi('/oauth2/access_token', params, { method: 'POST' });
+  return fetchApi('/oauth2/access_token', params, true);
 }
 
+export const getTimeLine = (params) => {
+  return fetchApi('/2/statuses/home_timeline.json', params)
+}

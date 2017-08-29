@@ -20,9 +20,13 @@ export function login(code) {
   }).then(data => {
     const dao = new TokenDao();
     dao.save(data.access_token).then(
-      () => dispatch({ type: Types.LOGIN })
+      () => {
+        dispatch({ type: Types.LOGIN })
+        dispatch({ type: Types.SAVE_TOKEN, token: data.access_token })
+      }
     ).catch(error => {
-      dispatch({ type: Types.LOGE_ERROE })
+      dispatch({ type: Types.LOGE_ERROR })
+      dispatch({ type: Types.CLEAR_TOKEN })
     })
   }).catch(error => {})
 }

@@ -5,6 +5,7 @@
 import { combineReducers } from 'redux';
 import { auth } from './auth'
 import { nav } from './nav'
+import { homeDataState } from './home'
 export default combineReducers({
-  auth, nav
+  auth, nav, homeDataState
 });

@@ -7,7 +7,8 @@ import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-n
 
 import Login from './containers/Login';
 import AppDrawer  from './AppDrawer';
-import TokenDao from './dao/TokenDao'
+import TokenDao from './dao/TokenDao';
+import * as ActionTypes from './actions/ActionTypes'
 
 export const AppNavigator = StackNavigator({
   AppDrawer: { screen: AppDrawer },
@@ -16,14 +17,18 @@ export const AppNavigator = StackNavigator({
 
 class AppWithNavigationState extends React.Component {
 
-  componentDidMount() {
+  componentWillMount() {
     const dao = new TokenDao();
     dao.get().then(token => {
-      if (!token) {
+      if (token) {
+        this.props.dispatch({ type: ActionTypes.SAVE_TOKEN, token: token });
+      } else {
         this.props.dispatch(NavigationActions.navigate({ routeName: 'Login' }));
+        this.props.dispatch({ type: ActionTypes.CLEAR_TOKEN })
       }
     }).catch(error => {
       this.props.dispatch(NavigationActions.navigate({ routeName: 'Login' }));
+      this.props.dispatch({ type: ActionTypes.CLEAR_TOKEN })
     })
   }
 
