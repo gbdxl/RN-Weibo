@@ -6,16 +6,7 @@ import { View, Text, TouchableHighlight, FlatList } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as Actions from '../actions/homeActions';
-
-class WeiboItem extends React.PureComponent{
-  render(){
-    return(
-      <View>
-
-      </View>
-    )
-  }
-}
+import WeiboItem from '../components/WeiboItem'
 
 class Main extends React.Component {
 
@@ -31,7 +22,7 @@ class Main extends React.Component {
 
   renderItem = ({ item }) => {
     return (
-      <View><Text>哈哈</Text></View>
+      <WeiboItem item={item}/>
     )
   }
 

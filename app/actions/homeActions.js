@@ -49,6 +49,7 @@ export function getLocalData() {
     const homeDao = new HomeDao();
     homeDao.get().then(data => {
       if (data) {
+        console.log(data);
         dispatch(fetchSuccess(data))
       } else {
         dispatch(getData())

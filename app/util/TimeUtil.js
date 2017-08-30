@@ -9,16 +9,19 @@ export function formartWeiboTime(created_at) {
   const temp = moment().format('YYYY-MM-D').split('-');
   let result;
   if (time[0] === temp[0]) {
-    if(time[1]===temp[1]){
-      if(temp[2]-time[2]===1){
-        result = momentObj.format('HH:ss:mm')
-      }else if(temp[2]-time[2]===1){
-        result = `昨天 ${momentObj.format('HH:ss:mm')}`
-      }else {
-        result =
+    if (time[1] === temp[1]) {
+      if (temp[2] === time[2]) {
+        result = momentObj.format('HH:ss');
+      } else if (temp[2] - time[2] === 1) {
+        result = `昨天 ${momentObj.format('HH:ss')}`;
+      } else {
+        result = momentObj.format('MM-DD HH:ss');
       }
+    } else {
+      result = momentObj.format('MM-DD HH:ss');
     }
-
+  } else {
+    result = momentObj.format('YYYY-MM-DD HH:ss');
   }
-
+  return result;
 }
