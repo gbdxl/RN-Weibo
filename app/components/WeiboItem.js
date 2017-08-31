@@ -13,6 +13,7 @@ import {
 import connect from 'redux';
 import Avatar from './Avatar';
 import { formartWeiboTime } from '../util/TimeUtil';
+import ParsedText from 'react-native-parsed-text'
 
 const TYPE_TEXT = 1;
 const TYPE_IMAGE = 2;
@@ -22,14 +23,39 @@ const { width, height } = Dimensions.get('window');
 const MARGIN = 12;
 const IMAGE_MARGIN = 5;
 
+const AT_REG = /@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}/i;
+const TOPIC_REG = /#[^#]+#/i;
+const URL_REG = /(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/i;
+
 class TextItem extends PureComponent {
+  handleUserPress = () => {
+
+  }
+
+  handleTopicPress = () => {
+
+  }
+
+  handleUrlPress = () => {
+
+  }
+
+  handleTopicPress
+
   render() {
     const { item, text } = this.props;
-    const reg = /.*@.+\s/g.exec(text);
     return (
-      <Text style={{ fontSize: 13 }}>
-
-      </Text>
+      <ParsedText
+        style={styles.textContainer}
+        parse={
+          [
+            { pattern: AT_REG, style: styles.clickText, onPress: this.handleUserPress },
+            { pattern: TOPIC_REG, style: styles.clickText, onPress: this.handleTopicPress },
+            { pattern: URL_REG, style: styles.clickText, onPress: this.handleUrlPress },
+          ]
+        }
+      >{text}
+      </ParsedText>
     )
   }
 }
@@ -66,10 +92,7 @@ class RetweetedTextItem extends PureComponent {
     const { item } = this.props;
     return (
       <View style={styles.retweetedContainer}>
-        <Text style={[styles.normalText, { margin: MARGIN }]}>
-          <Text style={{ color: '#5777b5' }}>@{item.retweeted_status.user.name}</Text>
-          <Text>:{item.retweeted_status.text}</Text>
-        </Text>
+        <TextItem item={item} text={'@' + item.retweeted_status.user.name + ':' + item.retweeted_status.text}/>
       </View>
     )
   }
@@ -81,10 +104,7 @@ class RetweetedImageItem extends PureComponent {
     const { item } = this.props;
     return (
       <View style={styles.retweetedContainer}>
-        <Text style={[styles.normalText, { margin: MARGIN }]}>
-          <Text>@{item.retweeted_status.user.name}:</Text>
-          <Text>{item.retweeted_status.text}</Text>
-        </Text>
+        <TextItem item={item} text={'@' + item.retweeted_status.user.name + ':' + item.retweeted_status.text}/>
         <ImageItem item={item} urls={item.retweeted_status.pic_urls}/>
       </View>
     )
@@ -110,8 +130,6 @@ export default class WeiboItem extends PureComponent {
 
   render() {
     const { item } = this.props;
-    const reg = /@([\u4e00-\u9fa5A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)._-]+)/g.exec(item.text);
-    console.log(reg);
     const source = item.source.replace(/.*>(.*)<.*/g, '$1')
     return (
       <View style={styles.container}>
@@ -127,7 +145,7 @@ export default class WeiboItem extends PureComponent {
           </View>
         </View>
         <View>
-          <Text style={[styles.normalText, { marginHorizontal: MARGIN, marginBottom: MARGIN }]}>{item.text}</Text>
+          <TextItem item={item} text={item.text}/>
           {this.renderContent()}
         </View>
       </View>
@@ -141,7 +159,8 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flexDirection: 'row',
-    padding: MARGIN,
+    marginHorizontal: MARGIN,
+    marginTop: MARGIN,
   },
   nameContainer: {
     justifyContent: 'space-between',
@@ -165,7 +184,14 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginHorizontal: MARGIN,
   },
+  textContainer: {
+    margin: MARGIN,
+  },
   retweetedContainer: {
     backgroundColor: '#f5f5f5'
+  },
+  clickText: {
+    fontSize: 13,
+    color: '#5777b5',
   }
 });
