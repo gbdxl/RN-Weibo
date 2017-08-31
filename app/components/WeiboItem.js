@@ -40,8 +40,6 @@ class TextItem extends PureComponent {
 
   }
 
-  handleTopicPress
-
   render() {
     const { item, text } = this.props;
     return (
@@ -72,7 +70,7 @@ class ImageItem extends PureComponent {
           onPress={() => {}}
         >
           <Image
-            style={[{ width: size, height: size, marginTop: IMAGE_MARGIN, resizeMode: 'cover' },]}
+            style={{ width: size, height: size, marginTop: IMAGE_MARGIN, resizeMode: 'cover' }}
             source={{ uri: v.thumbnail_pic }}
           />
         </TouchableOpacity>
@@ -167,7 +165,7 @@ const styles = StyleSheet.create({
     marginLeft: MARGIN,
   },
   name: {
-    fontSize: 13,
+    fontSize: 15,
     color: 'black',
   },
   lightText: {
@@ -175,7 +173,7 @@ const styles = StyleSheet.create({
     color: '#888888'
   },
   normalText: {
-    fontSize: 13,
+    fontSize: 15,
     color: '#333333'
   },
   imageContainer: {
@@ -185,13 +183,14 @@ const styles = StyleSheet.create({
     marginHorizontal: MARGIN,
   },
   textContainer: {
+    flex: 1,
     margin: MARGIN,
+    fontSize: 15,
   },
   retweetedContainer: {
     backgroundColor: '#f5f5f5'
   },
   clickText: {
-    fontSize: 13,
     color: '#5777b5',
   }
 });

@@ -81,5 +81,5 @@ export const getAccessToken = (params) => {
 }
 
 export const getTimeLine = (params) => {
-  return fetchApi('/2/statuses/home_timeline.json', params)
+  return fetchApi('/2/statuses/home_timeline.json',params)
 }

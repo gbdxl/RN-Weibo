@@ -2,9 +2,10 @@
  * Created by looper on 2017/8/29.
  */
 import * as TYPES from './ActionTypes';
-import HomeDao from '../dao/HomeDao'
-import TokenDao from '../dao/TokenDao'
-import * as API from '../network/api'
+import HomeDao from '../dao/HomeDao';
+import TokenDao from '../dao/TokenDao';
+import * as API from '../network/api';
+import Toast from 'react-native-root-toast';
 
 function fetchSuccess(json) {
   return {
@@ -49,7 +50,6 @@ export function getLocalData() {
     const homeDao = new HomeDao();
     homeDao.get().then(data => {
       if (data) {
-        console.log(data);
         dispatch(fetchSuccess(data))
       } else {
         dispatch(getData())
@@ -70,7 +70,6 @@ export function getData(since_id) {
       if (token) {
         API.getTimeLine({ access_token: token })
           .then(data => {
-            console.log(data);
             if (loadMore) {
               dispatch(fetchMoreDataSuccess(data.statuses))
             } else {
@@ -78,6 +77,11 @@ export function getData(since_id) {
               homeDao.save(data.statuses)
             }
           }).catch(error => {
+          if (error.code === 403) {
+            dispatch({ type: TYPES.LOGE_OUT })
+            dispatch({ type: TYPES.CLEAR_TOKEN })
+            Toast.show('授权过期，请重新登录');
+          }
           dispatch(loadMore ? fetchMoreDataFailure() : fetchFailure());
         })
       }

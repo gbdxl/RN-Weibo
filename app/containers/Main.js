@@ -29,8 +29,8 @@ class Main extends React.Component {
   renderFooter = (loading) => {
     return (
       loading ?
-        <View>
-          <Text>正在加载...</Text>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ fontSize: 13, color: '#666666', marginVertical: 10 }}>正在加载...</Text>
         </View> : null
     )
   }
@@ -39,12 +39,13 @@ class Main extends React.Component {
     const { data, refreshing, loading, error, actions } = this.props;
     return (
       <FlatList
-        keyExtractor={(item, index) => item.id}
+        keyExtractor={(item, index) => index}
         data={data}
         refreshing={refreshing}
         renderItem={this.renderItem}
         onRefresh={actions.getData}
         onEndReachedThreshold={0.5}
+        onEndReached={() => actions.getData(data[data.length - 1].id)}
         ListFooterComponent={this.renderFooter(loading)}
       />
     )
