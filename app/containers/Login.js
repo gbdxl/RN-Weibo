@@ -12,9 +12,15 @@ import { bindActionCreators } from 'redux'
 
 class Login extends React.Component {
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: '登录',
+      headerLeft: null,
+    }
+  }
+
   constructor(props) {
     super(props)
-    console.log(props)
   }
 
   render() {

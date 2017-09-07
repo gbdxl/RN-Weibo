@@ -7,13 +7,13 @@ import { DrawerNavigator } from 'react-navigation';
 
 const AppDrawer = DrawerNavigator({
   Main: {
-    screen: Main
+    screen: Main,
   },
   Profile: {
     screen: Profile
   },
-},{
-  initialRouteName:'Main',
+}, {
+  initialRouteName: 'Main',
 })
 
 export default AppDrawer

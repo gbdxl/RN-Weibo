@@ -42,6 +42,7 @@ export function homeDataState(state = initialState, action) {
         error: false
       };
     case Types.FETCH_HOME_MORE_DATA_SUCCESS:
+      action.data.shift();//删除重复元素
       return {
         ...state,
         refreshing: false,

@@ -18,9 +18,9 @@ export default class Avatar extends PureComponent {
 
 const styles = StyleSheet.create({
   avatar: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   icon: {
     position: 'absolute',

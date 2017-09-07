@@ -14,6 +14,7 @@ import connect from 'redux';
 import Avatar from './Avatar';
 import { formartWeiboTime } from '../util/TimeUtil';
 import ParsedText from 'react-native-parsed-text'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 const TYPE_TEXT = 1;
 const TYPE_IMAGE = 2;
@@ -44,7 +45,7 @@ class TextItem extends PureComponent {
     const { item, text } = this.props;
     return (
       <ParsedText
-        style={styles.textContainer}
+        style={[styles.textContainer,{ lineHeight: 20}]}
         parse={
           [
             { pattern: AT_REG, style: styles.clickText, onPress: this.handleUserPress },
@@ -91,6 +92,11 @@ class RetweetedTextItem extends PureComponent {
     return (
       <View style={styles.retweetedContainer}>
         <TextItem item={item} text={'@' + item.retweeted_status.user.name + ':' + item.retweeted_status.text}/>
+        <View style={styles.retweetedCommentBar}>
+          <Text style={styles.lightText}>转发 {item.retweeted_status.reposts_count}</Text>
+          <Text style={[styles.lightText, { marginLeft: 10 }]}>评论 {item.retweeted_status.comments_count}</Text>
+          <Text style={[styles.lightText, { marginLeft: 10 }]}>赞 {item.retweeted_status.attitudes_count}</Text>
+        </View>
       </View>
     )
   }
@@ -142,9 +148,29 @@ export default class WeiboItem extends PureComponent {
             </Text>
           </View>
         </View>
-        <View>
+        <View style={{ flex: 1 }}>
           <TextItem item={item} text={item.text}/>
           {this.renderContent()}
+          {
+            !item.retweeted_status && <View style={{ height: 0.5, marginHorizontal: 20, backgroundColor: '#e5e5e5' } }/>
+          }
+        </View>
+        <View style={styles.bottomBar}>
+          <View style={styles.functionsItem}>
+            <Icon name='thumbs-up' size={15} color='#888888'/>
+            <Text style={[styles.lightText, { marginLeft: 5, fontSize: 13 }]}>{item.attitudes_count}</Text>
+          </View>
+          <View style={styles.functionsItem}>
+            <Icon name='retweet' size={15} color='#888888'/>
+            <Text style={[styles.lightText, { marginLeft: 5, fontSize: 13 }]}>{item.reposts_count}</Text>
+          </View>
+          <View style={styles.functionsItem}>
+            <Icon name='comments' size={15} color='#888888'/>
+            <Text style={[styles.lightText, { marginLeft: 5, fontSize: 13 }]}>{item.comments_count}</Text>
+          </View>
+          <View style={styles.functionsItem}>
+            <Icon name='share-alt' size={15} color='#888888'/>
+          </View>
         </View>
       </View>
     )
@@ -161,7 +187,7 @@ const styles = StyleSheet.create({
     marginTop: MARGIN,
   },
   nameContainer: {
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginLeft: MARGIN,
   },
   name: {
@@ -181,6 +207,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginHorizontal: MARGIN,
+    marginBottom: MARGIN,
   },
   textContainer: {
     flex: 1,
@@ -188,9 +215,24 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   retweetedContainer: {
-    backgroundColor: '#f5f5f5'
+    backgroundColor: '#f5f5f5',
   },
   clickText: {
     color: '#5777b5',
+  },
+  retweetedCommentBar: {
+    flexDirection: 'row',
+    marginHorizontal: MARGIN,
+    marginBottom: MARGIN,
+  },
+  bottomBar: {
+    flexDirection: 'row',
+    height: 40,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  functionsItem: {
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });

@@ -60,15 +60,16 @@ export function getLocalData() {
   }
 }
 
-export function getData(since_id) {
+export function getData(max_id = 0) {
   const tokenDao = new TokenDao();
   const homeDao = new HomeDao;
-  const loadMore = !!since_id
+  const loadMore = !!max_id
   return (dispatch) => {
     dispatch(loadMore ? fetchMoreDataRequest() : fetchRequest())
     tokenDao.get().then(token => {
       if (token) {
-        API.getTimeLine({ access_token: token })
+        max_id = max_id === 0 ? 0 : max_id + 1;
+        API.getTimeLine({ access_token: token, max_id })
           .then(data => {
             if (loadMore) {
               dispatch(fetchMoreDataSuccess(data.statuses))
