@@ -9,8 +9,8 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
-import connect from 'redux';
 import Avatar from './Avatar';
 import { formartWeiboTime } from '../util/TimeUtil';
 import ParsedText from 'react-native-parsed-text'
@@ -45,7 +45,7 @@ class TextItem extends PureComponent {
     const { item, text } = this.props;
     return (
       <ParsedText
-        style={[styles.textContainer,{ lineHeight: 20}]}
+        style={[styles.textContainer, { lineHeight: 20 }]}
         parse={
           [
             { pattern: AT_REG, style: styles.clickText, onPress: this.handleUserPress },
@@ -133,46 +133,49 @@ export default class WeiboItem extends PureComponent {
   }
 
   render() {
-    const { item } = this.props;
+    const { item, onItemPress } = this.props;
     const source = item.source.replace(/.*>(.*)<.*/g, '$1')
     return (
-      <View style={styles.container}>
-        <View style={styles.topContainer}>
-          <Avatar url={item.user.profile_image_url}/>
-          <View style={styles.nameContainer}>
-            <Text style={styles.name}>{item.user.name}</Text>
-            <Text style={[styles.lightText, { marginTop: 3 }]}>
-              <Text>{formartWeiboTime(item.created_at)}
+      <TouchableHighlight onPress={onItemPress}>
+        <View style={styles.container}>
+          <View style={styles.topContainer}>
+            <Avatar url={item.user.profile_image_url}/>
+            <View style={styles.nameContainer}>
+              <Text style={styles.name}>{item.user.name}</Text>
+              <Text style={[styles.lightText, { marginTop: 3 }]}>
+                <Text>{formartWeiboTime(item.created_at)}
+                </Text>
+                {source && <Text> 来自 {source}</Text>}
               </Text>
-              {source && <Text> 来自 {source}</Text>}
-            </Text>
+            </View>
+          </View>
+          <View style={{ flex: 1 }}>
+            <TextItem item={item} text={item.text}/>
+            {this.renderContent()}
+            {
+              !item.retweeted_status &&
+              <View style={{ height: 0.5, marginHorizontal: 20, backgroundColor: '#e5e5e5' } }/>
+            }
+          </View>
+          <View style={styles.bottomBar}>
+            <View style={styles.functionsItem}>
+              <Icon name='thumbs-up' size={15} color='#888888'/>
+              <Text style={[styles.lightText, { marginLeft: 5, fontSize: 13 }]}>{item.attitudes_count}</Text>
+            </View>
+            <View style={styles.functionsItem}>
+              <Icon name='retweet' size={15} color='#888888'/>
+              <Text style={[styles.lightText, { marginLeft: 5, fontSize: 13 }]}>{item.reposts_count}</Text>
+            </View>
+            <View style={styles.functionsItem}>
+              <Icon name='comments' size={15} color='#888888'/>
+              <Text style={[styles.lightText, { marginLeft: 5, fontSize: 13 }]}>{item.comments_count}</Text>
+            </View>
+            <View style={styles.functionsItem}>
+              <Icon name='share-alt' size={15} color='#888888'/>
+            </View>
           </View>
         </View>
-        <View style={{ flex: 1 }}>
-          <TextItem item={item} text={item.text}/>
-          {this.renderContent()}
-          {
-            !item.retweeted_status && <View style={{ height: 0.5, marginHorizontal: 20, backgroundColor: '#e5e5e5' } }/>
-          }
-        </View>
-        <View style={styles.bottomBar}>
-          <View style={styles.functionsItem}>
-            <Icon name='thumbs-up' size={15} color='#888888'/>
-            <Text style={[styles.lightText, { marginLeft: 5, fontSize: 13 }]}>{item.attitudes_count}</Text>
-          </View>
-          <View style={styles.functionsItem}>
-            <Icon name='retweet' size={15} color='#888888'/>
-            <Text style={[styles.lightText, { marginLeft: 5, fontSize: 13 }]}>{item.reposts_count}</Text>
-          </View>
-          <View style={styles.functionsItem}>
-            <Icon name='comments' size={15} color='#888888'/>
-            <Text style={[styles.lightText, { marginLeft: 5, fontSize: 13 }]}>{item.comments_count}</Text>
-          </View>
-          <View style={styles.functionsItem}>
-            <Icon name='share-alt' size={15} color='#888888'/>
-          </View>
-        </View>
-      </View>
+      </TouchableHighlight>
     )
   }
 }

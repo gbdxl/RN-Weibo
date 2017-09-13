@@ -5,8 +5,6 @@ import {
   Platform,
   StatusBar
 } from 'react-native'
-// import { SET_USER } from '../actions/types'
-// import { store } from '../reducers/index'
 import Toast from 'react-native-root-toast'
 
 let activityCount = 0
@@ -81,5 +79,13 @@ export const getAccessToken = (params) => {
 }
 
 export const getTimeLine = (params) => {
-  return fetchApi('/2/statuses/home_timeline.json',params)
+  return fetchApi('/2/statuses/home_timeline.json', params)
+}
+//查看用户分组，需要授权
+export const getUserGroup = (params) => {
+  return fetchApi('/2/friendships/groups.json', params)
+}
+
+export const getComments = (params) => {
+  return fetchApi('/2/comments/show.json', params)
 }

@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import * as Actions from '../actions/homeActions';
 import WeiboItem from '../components/WeiboItem';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { NavigationActions } from 'react-navigation'
 
 class Main extends React.Component {
 
@@ -23,10 +22,7 @@ class Main extends React.Component {
     const iconName = isOpen ? 'md-arrow-dropup' : 'md-arrow-dropdown'
     const headerTitle = (
       <TouchableOpacity onPress={() => {
-        navigation.dispatch(NavigationActions.setParams({
-          params: { isOpen: !isOpen },
-          key: 'Main',
-        }))
+        setParams({ isOpen: !isOpen })
       }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ marginRight: 3, fontSize: Platform.OS === 'ios' ? 17 : 20, }}>我的首页</Text>
@@ -52,11 +48,12 @@ class Main extends React.Component {
 
   componentDidMount() {
     this.props.actions.getLocalData();
+    this.props.actions.getUserGroup();
   }
 
   renderItem = ({ item }) => {
     return (
-      <WeiboItem item={item}/>
+      <WeiboItem item={item} onItemPress={()=>this.props.navigation.navigate('Comment', { data: item })}/>
     )
   }
 
@@ -70,7 +67,8 @@ class Main extends React.Component {
   }
 
   render() {
-    const { data, refreshing, loading, error, actions } = this.props;
+    const { data, refreshing, loading, error, actions, groups, groupError } = this.props;
+    console.log(groups)
     return (
       <View style={{ flex: 1 }}>
         <FlatList
@@ -96,6 +94,8 @@ const mapStateToProps = state => {
     refreshing: state.homeDataState.refreshing,
     loading: state.homeDataState.loading,
     error: state.homeDataState.error,
+    groups: state.homeDataState.groups,
+    groupError: state.homeDataState.groupError,
   }
 };
 

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-navigation';
 
 import Login from './containers/Login';
+import Comment from './containers/Comment';
 import AppDrawer  from './AppDrawer';
 import TokenDao from './dao/TokenDao';
 import * as ActionTypes from './actions/ActionTypes'
@@ -13,6 +14,7 @@ import * as ActionTypes from './actions/ActionTypes'
 export const AppNavigator = StackNavigator({
   AppDrawer: { screen: AppDrawer },
   Login: { screen: Login },
+  Comment: { screen: Comment },
 });
 
 class AppWithNavigationState extends React.Component {
