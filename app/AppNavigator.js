@@ -10,6 +10,8 @@ import Comment from './containers/Comment';
 import AppDrawer  from './AppDrawer';
 import TokenDao from './dao/TokenDao';
 import * as ActionTypes from './actions/ActionTypes'
+import CodePush from 'react-native-code-push'
+import Toast from 'react-native-root-toast'
 
 export const AppNavigator = StackNavigator({
   AppDrawer: { screen: AppDrawer },
@@ -20,6 +22,16 @@ export const AppNavigator = StackNavigator({
 class AppWithNavigationState extends React.Component {
 
   componentWillMount() {
+    CodePush.sync({
+      deploymentKey: 'XUzwhLPr29HNmc_BkT4NNyY8yC0bcb2740ec-0b21-4a52-8408-8783ea107550',
+      updateDialog: {
+        optionalIgnoreButtonLabel: '稍后',
+        optionalInstallButtonLabel: '后台更新',
+        optionalUpdateMessage: 'Weibo有新版本了，是否更新？',
+        title: '更新提示'
+      },
+      installMode: CodePush.InstallMode.IMMEDIATE
+    });
     const dao = new TokenDao();
     dao.get().then(token => {
       if (token) {
@@ -47,3 +59,4 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(AppWithNavigationState);
+

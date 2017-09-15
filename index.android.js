@@ -11,6 +11,7 @@ import {
   AppRegistry,
 } from 'react-native';
 import AppWithNavigationState from './app/AppNavigator';
+import codePush from 'react-native-code-push';
 
 export default class Weibo extends Component {
   render() {
@@ -22,5 +23,6 @@ export default class Weibo extends Component {
   }
 }
 
+Weibo = codePush(Weibo)
 
 AppRegistry.registerComponent('Weibo', () => Weibo);
