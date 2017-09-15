@@ -44,19 +44,6 @@ function fetchMoreDataFailure() {
   };
 }
 
-function fetchUserGroupSuccess(data) {
-  return {
-    type: TYPES.FETCH_USER_GROUP_SUCCESS,
-    data
-  }
-}
-
-function fetchUserGroupFailure() {
-  return {
-    type: TYPES.FETCH_USER_GROUP_FAILURE
-  }
-}
-
 export function getData(id, max_id = 0) {
   const tokenDao = new TokenDao();
   const loadMore = !!max_id
@@ -73,9 +60,7 @@ export function getData(id, max_id = 0) {
             }
           }).catch(error => {
           if (error.code === 403) {
-            dispatch({ type: TYPES.LOGE_OUT })
-            dispatch({ type: TYPES.CLEAR_TOKEN })
-            Toast.show('授权过期，请重新登录');
+            Toast.show('接口限制，请稍后再试');
           }
           dispatch(loadMore ? fetchMoreDataFailure() : fetchFailure());
         })

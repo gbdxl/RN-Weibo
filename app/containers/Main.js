@@ -51,9 +51,13 @@ class Main extends React.Component {
     this.props.actions.getUserGroup();
   }
 
-  renderItem = ({ item }) => {
+  renderItem = ({ item, separators }) => {
     return (
-      <WeiboItem item={item} onItemPress={()=>this.props.navigation.navigate('Comment', { data: item })}/>
+      <WeiboItem
+        item={item}
+        separators={separators}
+        onItemPress={() => this.props.navigation.navigate('Comment', { data: item })}
+      />
     )
   }
 
