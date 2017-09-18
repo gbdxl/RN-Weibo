@@ -39,7 +39,7 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -67,6 +67,6 @@
 		<string>Zocial.ttf</string>
 	</array>
 	<key>CodePushDeploymentKey</key>
-	<string>deployment-key-here</string>
+	<string>$(CODEPUSH_KEY)</string>
 </dict>
 </plist>

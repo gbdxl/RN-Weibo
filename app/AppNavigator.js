@@ -23,7 +23,6 @@ class AppWithNavigationState extends React.Component {
 
   componentWillMount() {
     CodePush.sync({
-      deploymentKey: 'XUzwhLPr29HNmc_BkT4NNyY8yC0bcb2740ec-0b21-4a52-8408-8783ea107550',
       updateDialog: {
         optionalIgnoreButtonLabel: '稍后',
         optionalInstallButtonLabel: '后台更新',
