@@ -8,6 +8,7 @@ const initialState = {
   refreshing: false,
   error: false,
   loading: false,
+  end: false,
 };
 
 export function commentState(state = initialState, action) {
@@ -53,6 +54,13 @@ export function commentState(state = initialState, action) {
         loading: false,
         error: true
       };
+    case Types.FETCH_COMMENT_MORE_DATA_END:
+      return {
+        ...state,
+        refreshing: false,
+        loading: false,
+        end: true,
+      }
     default:
       return state;
   }

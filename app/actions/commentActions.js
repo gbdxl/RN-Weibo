@@ -43,6 +43,11 @@ function fetchMoreDataFailure() {
     type: TYPES.FETCH_COMMENT_MORE_DATA_FAILURE
   };
 }
+function fetchMoreDataEnd() {
+  return {
+    type: TYPES.FETCH_COMMENT_MORE_DATA_END
+  };
+}
 
 export function getData(id, max_id = 0) {
   const tokenDao = new TokenDao();
@@ -54,7 +59,11 @@ export function getData(id, max_id = 0) {
         API.getComments({ access_token: token, id, max_id })
           .then(data => {
             if (loadMore) {
-              dispatch(fetchMoreDataSuccess(data.comments))
+              if (data.comments) {
+                dispatch(fetchMoreDataSuccess(data.comments))
+              } else {
+                dispatch(fetchMoreDataEnd())
+              }
             } else {
               dispatch(fetchSuccess(data.comments))
             }

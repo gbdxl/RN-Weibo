@@ -7,7 +7,10 @@ import {
   StyleSheet,
   View,
   Text,
-  FlatList
+  FlatList,
+  TouchableOpacity,
+  Modal,
+  TextInput
 } from 'react-native';
 import WeiboItem from '../components/WeiboItem';
 import { bindActionCreators } from 'redux';
@@ -61,6 +64,9 @@ class Comment extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      modalVisible: false
+    }
   }
 
   componentDidMount() {
@@ -68,31 +74,34 @@ class Comment extends React.Component {
   }
 
   loadMore = () => {
-    const { comments, refreshing, loading, error, actions } = this.props;
-    if (!refreshing && !loading)
+    const { comments, refreshing, loading, error, actions, end } = this.props;
+    if (!refreshing && !loading && !end)
       actions.getData(this.props.navigation.state.params.data.id, comments[comments.length - 1].id)
   }
 
   renderFooter = () => {
-    const { loading, error } = this.props;
+    const { loading, error, end } = this.props;
     let content;
-    if (loading || error) {
-      content = (
-        <View style={{ height: 50, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={styles.lightText}>{loading ? '加载中...' : '出错了'}</Text>
-        </View>
-      )
-    } else {
-      content = null;
+    if (loading) {
+      content = '加载中...';
+    } else if (error) {
+      content = '出错了';
+    } else if (end) {
+      content = '没有更多了';
     }
-    return content;
+    return (
+      <View style={{ height: 50, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={styles.lightText}>{content}</Text>
+      </View>
+    )
   }
 
   render() {
-    const { comments, refreshing, loading, error, actions } = this.props;
+    const { comments, refreshing, loading, error, actions, } = this.props;
     return (
       <View style={{ flex: 1 }}>
         <FlatList
+          contentContainerStyle={{ paddingBottom: 50 }}
           keyExtractor={(item, index) => item.id}
           ListHeaderComponent={<WeiboItem item={this.props.navigation.state.params.data}/>}
           ListFooterComponent={this.renderFooter}
@@ -101,6 +110,47 @@ class Comment extends React.Component {
           onEndReached={this.loadMore}
           onEndReachedThreshold={0.5}
         />
+        <TouchableOpacity onPress={() => this.setState({ modalVisible: true })}>
+          <View style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 50,
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            backgroundColor: 'white'
+          }}>
+            <View
+              style={{ position: 'absolute', height: 0.5, backgroundColor: '#e5e5e5', bottom: 50, left: 0, right: 0 }}/>
+            <Avatar url={this.props.navigation.state.params.data.user.profile_image_url} size={40}/>
+            <Text style={[styles.normalText, { marginLeft: 10 }]}>添加评论...</Text>
+          </View>
+        </TouchableOpacity>
+        <Modal
+          animationType={'slide'}
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => this.setState({ modalVisible: false })}
+        >
+          <View style={styles.modalStyle}>
+            <TouchableOpacity
+              style={{ flex: 1 }}
+              onPress={() => this.setState({ modalVisible: false })}
+            />
+            <View style={{ height: 100, padding: 10, backgroundColor: 'white' }}>
+              <TextInput
+                style={[styles.normalText, { flex: 1 }]}
+                placeholder={'添加评论...'}
+                returnKeyType={'send'}
+                onSubmitEditing={() => console.log('提交')}
+              />
+              <View style={{ backgroundColor: 'black', height: 30 }}/>
+            </View>
+          </View>
+        </Modal>
       </View>
     )
   }
@@ -138,5 +188,10 @@ const styles = StyleSheet.create({
   },
   clickText: {
     color: '#5777b5',
+  },
+  modalStyle: {
+    flex: 1,
+    backgroundColor: '#11111180',
+    justifyContent: 'flex-end',
   },
 })
